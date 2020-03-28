@@ -1,3 +1,9 @@
 {% extends "base.html" %}
 {% block content %}
+    {% for total_count_obj in total_counts_covid %}
+    <div class="text-center">
+        <h1> {{ total_count_obj.number }}</h1>
+        <p>{{ total_count_obj.name }}</p>
+    </div>
+    {% endfor %}
 {% endblock %}

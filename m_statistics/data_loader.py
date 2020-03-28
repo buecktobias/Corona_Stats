@@ -6,7 +6,7 @@ URL_recoveries = URL_Data + "time_series_covid19_confirmed_global.csv"
 URL_deaths = URL_Data + "time_series_covid19_deaths_global.csv"
 URL_cases = URL_Data + "time_series_covid19_confirmed_global.csv"
 
-urls_file = [(URL_cases, "data/cases.csv"), (URL_recoveries, "data/recoveries.csv"), (URL_deaths, "data/deaths.csv")]
+urls_file = [(URL_cases, "../static/data/cases.csv"), (URL_recoveries, "../static/data/recoveries.csv"), (URL_deaths, "../static/data/deaths.csv")]
 
 
 def download(url, file_name):
@@ -27,4 +27,4 @@ def always_update():
 
 
 if __name__ == '__main__':
-    always_update()
+    download_all_files()
