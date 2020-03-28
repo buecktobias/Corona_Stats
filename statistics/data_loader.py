@@ -25,5 +25,6 @@ def always_update():
     t = Timer(1 * 60 * 60, always_update)  # calls itself every hour
     t.start()
 
+
 if __name__ == '__main__':
     always_update()
