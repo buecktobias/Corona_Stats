@@ -25,3 +25,7 @@ def get_cases():
 def get_recoveries():
     return calc_sum(df_recoveries, -1)
 
+
+def get_active_cases():
+    return get_cases() - get_deaths() - get_recoveries()
+

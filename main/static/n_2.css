@@ -4,14 +4,17 @@
 .cases-color {
     color:  #e6c346;
 }
+.active-cases-color {
+    color: #fff300;
+}
 .recovered-color{
     color: #3bff00;
 }
 .background-color{
-    background-color: #202045;
+    background-color: #252c37;
 }
 .light-background-color{
-    background-color: #384482;
+    background-color: #333445;
 }
 
 .fill {

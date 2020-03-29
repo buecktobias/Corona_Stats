@@ -30,7 +30,14 @@ class HomeView(View):
             "style": "recovered-color"
                      }
 
-        return render(request, "index.html", {"title": "Home", "total_counts_covid": [cases_obj, deaths_obj, recoveries_obj]})
+        active_cases = data_analysis_1.get_active_cases()
+        active_cases_obj = {
+            "name": "Total Confirmed Active Cases",
+            "number": active_cases,
+            "style": "active-cases-color"
+                     }
+
+        return render(request, "index.html", {"title": "Home", "total_counts_covid": [cases_obj, deaths_obj, recoveries_obj, active_cases_obj]})
 
 
 class SymptomsView(View):
