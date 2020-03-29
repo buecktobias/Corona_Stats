@@ -2,11 +2,12 @@ import requests
 from threading import Timer
 
 URL_Data = "https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/"
-URL_recoveries = URL_Data + "time_series_covid19_confirmed_global.csv"
+URL_recoveries = URL_Data + "time_series_covid19_recovered_global.csv"
 URL_deaths = URL_Data + "time_series_covid19_deaths_global.csv"
 URL_cases = URL_Data + "time_series_covid19_confirmed_global.csv"
 
-urls_file = [(URL_cases, "../static/data/cases.csv"), (URL_recoveries, "../static/data/recoveries.csv"), (URL_deaths, "../static/data/deaths.csv")]
+file = "../main/static/data/"
+urls_file = [(URL_cases, file + "cases.csv"), (URL_recoveries, file + "recoveries.csv"), (URL_deaths, file + "deaths.csv")]
 
 
 def download(url, file_name):

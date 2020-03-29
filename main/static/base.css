@@ -1,0 +1,46 @@
+.brand-color {
+    color: #47121a;
+}
+.cases-color {
+    color:  #e6c346;
+}
+.recovered-color{
+    color: #3bff00;
+}
+.background-color{
+    background-color: #202045;
+}
+.light-background-color{
+    background-color: #384482;
+}
+
+.fill {
+    min-height: 100%;
+    height: 100%;
+}
+
+.normal-text{
+    font-family: "Futura", "Trebuchet MS", Arial, sans-serif;
+}
+
+html {
+  font-size: 1rem;
+}
+
+@media (min-width: 600px){
+    html{
+        font-size: 1.2rem;
+    }
+}
+
+@media (min-width: 800px){
+    html{
+        font-size: 1.4rem;
+    }
+}
+
+@media (min-width: 1000px){
+    html{
+        font-size: 1.6rem;
+    }
+}
