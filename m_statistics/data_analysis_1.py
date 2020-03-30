@@ -1,4 +1,6 @@
 import pandas as pd
+from matplotlib import pyplot as plt
+from .data_loader import CASES_FILE, DEATHS_FILE, RECOVERIES_FILE, DATA_FOLDER
 
 
 def calc_sum(df, column):
@@ -8,24 +10,118 @@ def calc_sum(df, column):
     return result
 
 
-DATA_FOLDER = "./main/static/data/"
-df_deaths = pd.read_csv(DATA_FOLDER + "deaths.csv")
-df_cases = pd.read_csv(DATA_FOLDER + "cases.csv")
-df_recoveries = pd.read_csv(DATA_FOLDER + "recoveries.csv")
+def get_all_sums(df):
+    ls = []
+    for i in range(4, len(df.columns)):
+        ls.append(calc_sum(df, i))
+    return ls
 
 
-def get_deaths():
-    return calc_sum(df_deaths, -1)
+class DataAnalysis:
+    instance = None
 
+    @staticmethod
+    def get_instance():
+        return DataAnalysis.instance
 
-def get_cases():
-    return calc_sum(df_cases, -1)
+    def __init__(self):
+        if DataAnalysis.instance is None:
+            self.DATA_FOLDER = DATA_FOLDER
+            self.PLOT_FOLDER = "./main/static/plots/"
 
+            # DATA FILE NAMES
+            self.CASES_TIME_SERIES_DATA_FILE = CASES_FILE
+            self.RECOVERIES_TIME_SERIES_DATA_FILE = RECOVERIES_FILE
+            self.DEATHS_TIME_SERIES_DATA_FILE = DEATHS_FILE
+
+            # DFs
+            self.df_deaths = None
+            self.df_cases = None
+            self.df_recoveries = None
+
+            # time series s
+            self.cases_time_series = None
+            self.deaths_time_series = None
+            self.recoveries_time_series = None
+            self.active_cases_time_series = None
+
+            # plot files
+            self.CASES_PLOT_FILE = self.PLOT_FOLDER + "cases.svg"
+            self.DEATHS_PLOT_FILE = self.PLOT_FOLDER + "deaths.svg"
+            self.RECOVERIES_PLOT_FILE = self.PLOT_FOLDER + "recoveries.svg"
+            self.ACTIVE_CASES_PLOT_FILE = self.PLOT_FOLDER + "active_cases.svg"
+
+            self.load()
+
+            DataAnalysis.instance = self
+        else:
+            pass
+
+    def load(self):
+        self.load_dfs()
+        self.load_time_series()
+
+    def load_dfs(self):
+        self.df_deaths = pd.read_csv(self.DEATHS_TIME_SERIES_DATA_FILE)
+        self.df_cases = pd.read_csv(self.CASES_TIME_SERIES_DATA_FILE)
+        self.df_recoveries = pd.read_csv(self.RECOVERIES_TIME_SERIES_DATA_FILE)
+
+    def load_time_series(self):
+        self.cases_time_series = self.get_time_series_cases()
+        self.deaths_time_series = self.get_time_series_deaths()
+        self.recoveries_time_series = self.get_time_series_recoveries()
+        self.active_cases_time_series = self.get_time_series_active_cases()
+
+    def get_deaths(self):
+        return calc_sum(self.df_deaths, -1)
+
+    def get_cases(self):
+        return calc_sum(self.df_cases, -1)
+
+    def get_recoveries(self):
+        return calc_sum(self.df_recoveries, -1)
+
+    def get_active_cases(self):
+        return self.get_cases() - self.get_deaths() - self.get_recoveries()
+
+    def get_time_series_cases(self):
+        return get_all_sums(self.df_cases)
+
+    def get_time_series_deaths(self):
+        return get_all_sums(self.df_deaths)
+
+    def get_time_series_recoveries(self):
+        return get_all_sums(self.df_recoveries)
+
+    def get_time_series_active_cases(self):
+        cases = self.get_time_series_cases()
+        deaths = self.get_time_series_deaths()
+        recoveries = self.get_time_series_recoveries()
+
+        active_cases = []
+
+        for i in range(len(cases)):
+            active_cases.append(cases[i] - deaths[i] - recoveries[i])
+
+        return active_cases
+
+    def get_dates(self):
+        return list(self.df_cases.columns[4:])
+
+    def create_time_series_plot(self, data, title, to_file):
+        plt.title(f"COVID-19 {title}")
+        plt.xticks(list(range(0, len(self.get_dates()), 10)))
+        plt.plot(self.get_dates(), data)
+        plt.savefig(to_file)
+
+    def create_cases_plot(self):
+        self.create_time_series_plot(self.cases_time_series, "Cases", self.CASES_PLOT_FILE)
+
+    def create_deaths_plot(self):
+        self.create_time_series_plot(self.deaths_time_series, "Deaths", self.DEATHS_PLOT_FILE)
+
+    def create_recoveries_plot(self):
+        self.create_time_series_plot(self.recoveries_time_series, "Recoveries", self.RECOVERIES_PLOT_FILE)
     
-def get_recoveries():
-    return calc_sum(df_recoveries, -1)
-
-
-def get_active_cases():
-    return get_cases() - get_deaths() - get_recoveries()
-
+    def create_active_cases_plot(self):
+        self.create_time_series_plot(self.active_cases_time_series, "Active Cases", self.ACTIVE_CASES_PLOT_FILE)

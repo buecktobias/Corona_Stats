@@ -6,8 +6,15 @@ URL_recoveries = URL_Data + "time_series_covid19_recovered_global.csv"
 URL_deaths = URL_Data + "time_series_covid19_deaths_global.csv"
 URL_cases = URL_Data + "time_series_covid19_confirmed_global.csv"
 
-file = "../main/static/data/"
-urls_file = [(URL_cases, file + "cases.csv"), (URL_recoveries, file + "recoveries.csv"), (URL_deaths, file + "deaths.csv")]
+DATA_FOLDER = "../main/static/data/"
+
+CASES_FILE = DATA_FOLDER + "cases.csv"
+RECOVERIES_FILE = DATA_FOLDER + "recoveries.csv"
+DEATHS_FILE = DATA_FOLDER + "deaths.csv"
+
+urls_file = [(URL_cases, CASES_FILE),
+             (URL_recoveries, RECOVERIES_FILE),
+             (URL_deaths, DEATHS_FILE)]
 
 
 def download(url, file_name):

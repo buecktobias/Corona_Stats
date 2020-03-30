@@ -7,6 +7,7 @@ from m_statistics import data_analysis_1
 
 
 class HomeView(View):
+
     def get(self, request):
 
         cases = data_analysis_1.get_cases()
