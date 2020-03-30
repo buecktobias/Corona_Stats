@@ -51,26 +51,16 @@ class DataAnalysis:
             self.RECOVERIES_PLOT_FILE = self.PLOT_FOLDER + "recoveries.svg"
             self.ACTIVE_CASES_PLOT_FILE = self.PLOT_FOLDER + "active_cases.svg"
 
-            self.load()
+            self.update()
 
             DataAnalysis.instance = self
         else:
             pass
 
-    def load(self):
-        self.load_dfs()
-        self.load_time_series()
-
-    def load_dfs(self):
-        self.df_deaths = pd.read_csv(self.DEATHS_TIME_SERIES_DATA_FILE)
-        self.df_cases = pd.read_csv(self.CASES_TIME_SERIES_DATA_FILE)
-        self.df_recoveries = pd.read_csv(self.RECOVERIES_TIME_SERIES_DATA_FILE)
-
-    def load_time_series(self):
-        self.cases_time_series = self.get_time_series_cases()
-        self.deaths_time_series = self.get_time_series_deaths()
-        self.recoveries_time_series = self.get_time_series_recoveries()
-        self.active_cases_time_series = self.get_time_series_active_cases()
+    def update(self):
+        self.__load_dfs()
+        self.__load_time_series()
+        self.__create_plots()
 
     def get_deaths(self):
         return calc_sum(self.df_deaths, -1)
@@ -84,19 +74,36 @@ class DataAnalysis:
     def get_active_cases(self):
         return self.get_cases() - self.get_deaths() - self.get_recoveries()
 
-    def get_time_series_cases(self):
+    def __create_plots(self):
+        self.__create_active_cases_plot()
+        self.__create_cases_plot()
+        self.__create_recoveries_plot()
+        self.__create_deaths_plot()
+
+    def __load_dfs(self):
+        self.df_deaths = pd.read_csv(self.DEATHS_TIME_SERIES_DATA_FILE)
+        self.df_cases = pd.read_csv(self.CASES_TIME_SERIES_DATA_FILE)
+        self.df_recoveries = pd.read_csv(self.RECOVERIES_TIME_SERIES_DATA_FILE)
+
+    def __load_time_series(self):
+        self.cases_time_series = self.__get_time_series_cases()
+        self.deaths_time_series = self.__get_time_series_deaths()
+        self.recoveries_time_series = self.__get_time_series_recoveries()
+        self.active_cases_time_series = self.__get_time_series_active_cases()
+
+    def __get_time_series_cases(self):
         return get_all_sums(self.df_cases)
 
-    def get_time_series_deaths(self):
+    def __get_time_series_deaths(self):
         return get_all_sums(self.df_deaths)
 
-    def get_time_series_recoveries(self):
+    def __get_time_series_recoveries(self):
         return get_all_sums(self.df_recoveries)
 
-    def get_time_series_active_cases(self):
-        cases = self.get_time_series_cases()
-        deaths = self.get_time_series_deaths()
-        recoveries = self.get_time_series_recoveries()
+    def __get_time_series_active_cases(self):
+        cases = self.__get_time_series_cases()
+        deaths = self.__get_time_series_deaths()
+        recoveries = self.__get_time_series_recoveries()
 
         active_cases = []
 
@@ -105,23 +112,23 @@ class DataAnalysis:
 
         return active_cases
 
-    def get_dates(self):
+    def __get_dates(self):
         return list(self.df_cases.columns[4:])
 
-    def create_time_series_plot(self, data, title, to_file):
+    def __create_time_series_plot(self, data, title, to_file):
         plt.title(f"COVID-19 {title}")
-        plt.xticks(list(range(0, len(self.get_dates()), 10)))
-        plt.plot(self.get_dates(), data)
+        plt.xticks(list(range(0, len(self.__get_dates()), 10)))
+        plt.plot(self.__get_dates(), data)
         plt.savefig(to_file)
 
-    def create_cases_plot(self):
-        self.create_time_series_plot(self.cases_time_series, "Cases", self.CASES_PLOT_FILE)
+    def __create_cases_plot(self):
+        self.__create_time_series_plot(self.cases_time_series, "Cases", self.CASES_PLOT_FILE)
 
-    def create_deaths_plot(self):
-        self.create_time_series_plot(self.deaths_time_series, "Deaths", self.DEATHS_PLOT_FILE)
+    def __create_deaths_plot(self):
+        self.__create_time_series_plot(self.deaths_time_series, "Deaths", self.DEATHS_PLOT_FILE)
 
-    def create_recoveries_plot(self):
-        self.create_time_series_plot(self.recoveries_time_series, "Recoveries", self.RECOVERIES_PLOT_FILE)
+    def __create_recoveries_plot(self):
+        self.__create_time_series_plot(self.recoveries_time_series, "Recoveries", self.RECOVERIES_PLOT_FILE)
     
-    def create_active_cases_plot(self):
-        self.create_time_series_plot(self.active_cases_time_series, "Active Cases", self.ACTIVE_CASES_PLOT_FILE)
+    def __create_active_cases_plot(self):
+        self.__create_time_series_plot(self.active_cases_time_series, "Active Cases", self.ACTIVE_CASES_PLOT_FILE)
