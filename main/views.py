@@ -54,11 +54,11 @@ class HomeView(View):
             return after_static_part
 
         active_cases_plot_file = data_analysis.ACTIVE_CASES_PLOT_FILE
-        cases_plot_file =        data_analysis.CASES_PLOT_FILE
-        recoveries_plot_file =   data_analysis.RECOVERIES_PLOT_FILE
-        deaths_plot_file =       data_analysis.DEATHS_PLOT_FILE
+        cases_plot_file = data_analysis.CASES_PLOT_FILE
+        recoveries_plot_file = data_analysis.RECOVERIES_PLOT_FILE
+        deaths_plot_file = data_analysis.DEATHS_PLOT_FILE
 
-        file_paths = [active_cases_plot_file, cases_plot_file, recoveries_plot_file, deaths_plot_file]
+        file_paths = [cases_plot_file, deaths_plot_file, recoveries_plot_file, active_cases_plot_file]
 
         file_paths_after_static = list(map(get_part_after_static, file_paths))
         return file_paths_after_static

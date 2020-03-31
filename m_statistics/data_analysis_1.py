@@ -1,8 +1,10 @@
 import pandas as pd
 from matplotlib import pyplot as plt
-from .data_loader import CASES_FILE_NAME, RECOVERIES_FILE_NAME, DEATHS_FILE_NAME
+from m_statistics.data_loader import CASES_FILE_NAME, RECOVERIES_FILE_NAME, DEATHS_FILE_NAME
 import Corona_Stats.settings as settings
 import os
+from m_statistics.colors import Color
+
 
 def calc_sum(df, column):
     result = 0
@@ -47,14 +49,11 @@ class DataAnalysis:
             self.deaths_time_series = None
             self.recoveries_time_series = None
             self.active_cases_time_series = None
-
             # plot files
             self.CASES_PLOT_FILE = os.path.join(settings.PLOT_FOLDER_PATH, "cases.svg")
             self.DEATHS_PLOT_FILE = os.path.join(settings.PLOT_FOLDER_PATH, "deaths.svg")
             self.RECOVERIES_PLOT_FILE = os.path.join(settings.PLOT_FOLDER_PATH, "recoveries.svg")
             self.ACTIVE_CASES_PLOT_FILE = os.path.join(settings.PLOT_FOLDER_PATH, "active_cases.svg")
-
-            self.update()
 
             DataAnalysis.instance = self
         else:
@@ -66,12 +65,18 @@ class DataAnalysis:
         self.__create_plots()
 
     def get_deaths(self):
+        if self.df_deaths is None:
+            self.__load_dfs()
         return calc_sum(self.df_deaths, -1)
 
     def get_cases(self):
+        if self.df_cases is None:
+            self.__load_dfs()
         return calc_sum(self.df_cases, -1)
 
     def get_recoveries(self):
+        if self.df_recoveries is None:
+            self.__load_dfs()
         return calc_sum(self.df_recoveries, -1)
 
     def get_active_cases(self):
@@ -118,21 +123,31 @@ class DataAnalysis:
     def __get_dates(self):
         return list(self.df_cases.columns[4:])
 
-    def __create_time_series_plot(self, data, title, to_file):
+    def __create_time_series_plot(self, data, title, to_file, color):
         fig, ax = plt.subplots()
         ax.set_title(f"COVID-19 {title}")
         ax.set_xticks(list(range(0, len(self.__get_dates()), 10)))
-        ax.plot(self.__get_dates(), data)
+        ax.plot(self.__get_dates(), data, c=color)
+        bg_color = Color.light_background_color
+        ax.set_facecolor(bg_color)
         fig.savefig(to_file)
 
     def __create_cases_plot(self):
-        self.__create_time_series_plot(self.cases_time_series, "Cases", self.CASES_PLOT_FILE)
+        color = Color.cases_color
+        self.__create_time_series_plot(self.cases_time_series, "Cases", self.CASES_PLOT_FILE, color)
 
     def __create_deaths_plot(self):
-        self.__create_time_series_plot(self.deaths_time_series, "Deaths", self.DEATHS_PLOT_FILE)
+        color = Color.brand_color
+        self.__create_time_series_plot(self.deaths_time_series, "Deaths", self.DEATHS_PLOT_FILE, color)
 
     def __create_recoveries_plot(self):
-        self.__create_time_series_plot(self.recoveries_time_series, "Recoveries", self.RECOVERIES_PLOT_FILE)
+        color = Color.recovered_color
+        self.__create_time_series_plot(self.recoveries_time_series, "Recoveries", self.RECOVERIES_PLOT_FILE, color)
     
     def __create_active_cases_plot(self):
-        self.__create_time_series_plot(self.active_cases_time_series, "Active Cases", self.ACTIVE_CASES_PLOT_FILE)
+        color = Color.active_cases_color
+        self.__create_time_series_plot(self.active_cases_time_series, "Active Cases", self.ACTIVE_CASES_PLOT_FILE, color)
+
+
+if __name__ == '__main__':
+    DataAnalysis().update()
