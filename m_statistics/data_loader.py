@@ -1,20 +1,22 @@
 import requests
 from threading import Timer
+import Corona_Stats.settings as settings
+import os
 
 URL_Data = "https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/"
 URL_recoveries = URL_Data + "time_series_covid19_recovered_global.csv"
 URL_deaths = URL_Data + "time_series_covid19_deaths_global.csv"
 URL_cases = URL_Data + "time_series_covid19_confirmed_global.csv"
 
-DATA_FOLDER = "../main/static/data/"
+DATA_FOLDER = settings.DATA_FOLDER_PATH
 
-CASES_FILE = DATA_FOLDER + "cases.csv"
-RECOVERIES_FILE = DATA_FOLDER + "recoveries.csv"
-DEATHS_FILE = DATA_FOLDER + "deaths.csv"
+CASES_FILE_NAME = os.path.join(DATA_FOLDER, "cases.csv")
+RECOVERIES_FILE_NAME = os.path.join(DATA_FOLDER, "recoveries.csv")
+DEATHS_FILE_NAME = os.path.join(DATA_FOLDER, "deaths.csv")
 
-urls_file = [(URL_cases, CASES_FILE),
-             (URL_recoveries, RECOVERIES_FILE),
-             (URL_deaths, DEATHS_FILE)]
+urls_file = [(URL_cases, CASES_FILE_NAME),
+             (URL_recoveries, RECOVERIES_FILE_NAME),
+             (URL_deaths, DEATHS_FILE_NAME)]
 
 
 def download(url, file_name):

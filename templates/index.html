@@ -13,5 +13,10 @@
                 <p class="mb-2 text-muted" style="max-width:100%; width:auto">{{ total_count_obj.name }}</p>
             </div>
         {% endfor %}
+        {% for plot_file in plot_files %}
+            <div>
+            <img src="{% static plot_file %}" alt="plot">
+            </div>
+        {% endfor %}
     </div>
 {% endblock %}

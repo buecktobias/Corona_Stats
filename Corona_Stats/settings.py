@@ -120,3 +120,12 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
+
+
+STATIC_FOLDER_PATH = os.path.join(BASE_DIR, "static")
+PLOT_FOLDER_PATH = os.path.join(STATIC_FOLDER_PATH, "plots")
+DATA_FOLDER_PATH = os.path.join(STATIC_FOLDER_PATH, "data")
+
+STATICFILES_DIRS = [
+    STATIC_FOLDER_PATH,
+]

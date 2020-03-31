@@ -1,7 +1,7 @@
 import pandas as pd
 from matplotlib import pyplot as plt
-from .data_loader import CASES_FILE, DEATHS_FILE, RECOVERIES_FILE, DATA_FOLDER
-
+from .data_loader import CASES_FILE_NAME, RECOVERIES_FILE_NAME, DEATHS_FILE_NAME
+import Corona_Stats.settings as settings
 
 def calc_sum(df, column):
     result = 0
@@ -26,30 +26,32 @@ class DataAnalysis:
 
     def __init__(self):
         if DataAnalysis.instance is None:
-            self.DATA_FOLDER = DATA_FOLDER
-            self.PLOT_FOLDER = "./main/static/plots/"
 
             # DATA FILE NAMES
-            self.CASES_TIME_SERIES_DATA_FILE = CASES_FILE
-            self.RECOVERIES_TIME_SERIES_DATA_FILE = RECOVERIES_FILE
-            self.DEATHS_TIME_SERIES_DATA_FILE = DEATHS_FILE
+            self.CASES_TIME_SERIES_DATA_FILE = CASES_FILE_NAME
+            self.RECOVERIES_TIME_SERIES_DATA_FILE = RECOVERIES_FILE_NAME
+            self.DEATHS_TIME_SERIES_DATA_FILE = DEATHS_FILE_NAME
+
+            # DFs
+            self.df_deaths = None
+            self.df_cases = None
 
             # DFs
             self.df_deaths = None
             self.df_cases = None
             self.df_recoveries = None
 
-            # time series s
+            # time series
             self.cases_time_series = None
             self.deaths_time_series = None
             self.recoveries_time_series = None
             self.active_cases_time_series = None
 
             # plot files
-            self.CASES_PLOT_FILE = self.PLOT_FOLDER + "cases.svg"
-            self.DEATHS_PLOT_FILE = self.PLOT_FOLDER + "deaths.svg"
-            self.RECOVERIES_PLOT_FILE = self.PLOT_FOLDER + "recoveries.svg"
-            self.ACTIVE_CASES_PLOT_FILE = self.PLOT_FOLDER + "active_cases.svg"
+            self.CASES_PLOT_FILE = settings.PLOT_FOLDER_PATH + "cases.svg"
+            self.DEATHS_PLOT_FILE = settings.PLOT_FOLDER_PATH + "deaths.svg"
+            self.RECOVERIES_PLOT_FILE = settings.PLOT_FOLDER_PATH + "recoveries.svg"
+            self.ACTIVE_CASES_PLOT_FILE = settings.PLOT_FOLDER_PATH + "active_cases.svg"
 
             self.update()
 
