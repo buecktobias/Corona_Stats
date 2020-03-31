@@ -2,6 +2,7 @@ import pandas as pd
 from matplotlib import pyplot as plt
 from .data_loader import CASES_FILE_NAME, RECOVERIES_FILE_NAME, DEATHS_FILE_NAME
 import Corona_Stats.settings as settings
+import os
 
 def calc_sum(df, column):
     result = 0
@@ -48,10 +49,10 @@ class DataAnalysis:
             self.active_cases_time_series = None
 
             # plot files
-            self.CASES_PLOT_FILE = settings.PLOT_FOLDER_PATH + "cases.svg"
-            self.DEATHS_PLOT_FILE = settings.PLOT_FOLDER_PATH + "deaths.svg"
-            self.RECOVERIES_PLOT_FILE = settings.PLOT_FOLDER_PATH + "recoveries.svg"
-            self.ACTIVE_CASES_PLOT_FILE = settings.PLOT_FOLDER_PATH + "active_cases.svg"
+            self.CASES_PLOT_FILE = os.path.join(settings.PLOT_FOLDER_PATH, "cases.svg")
+            self.DEATHS_PLOT_FILE = os.path.join(settings.PLOT_FOLDER_PATH, "deaths.svg")
+            self.RECOVERIES_PLOT_FILE = os.path.join(settings.PLOT_FOLDER_PATH, "recoveries.svg")
+            self.ACTIVE_CASES_PLOT_FILE = os.path.join(settings.PLOT_FOLDER_PATH, "active_cases.svg")
 
             self.update()
 
@@ -118,10 +119,11 @@ class DataAnalysis:
         return list(self.df_cases.columns[4:])
 
     def __create_time_series_plot(self, data, title, to_file):
-        plt.title(f"COVID-19 {title}")
-        plt.xticks(list(range(0, len(self.__get_dates()), 10)))
-        plt.plot(self.__get_dates(), data)
-        plt.savefig(to_file)
+        fig, ax = plt.subplots()
+        ax.set_title(f"COVID-19 {title}")
+        ax.set_xticks(list(range(0, len(self.__get_dates()), 10)))
+        ax.plot(self.__get_dates(), data)
+        fig.savefig(to_file)
 
     def __create_cases_plot(self):
         self.__create_time_series_plot(self.cases_time_series, "Cases", self.CASES_PLOT_FILE)
