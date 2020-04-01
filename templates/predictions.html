@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block head %}
+    {% load static %}
+{% endblock %}
+
+{% block content %}
+    <div class="pt-5">
+            {% for plot_file in prediction_plots %}
+            <div class="text-center mt-2 mb-2">
+            <img src="{% static plot_file %}" alt="plot">
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

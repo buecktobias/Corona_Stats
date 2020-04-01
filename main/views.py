@@ -5,6 +5,10 @@ from m_statistics import data_analysis_1
 
 # Create your views here.
 
+def get_part_after_static(file_path):
+    after_static_part = file_path.split("static/")[-1]
+    return after_static_part
+
 
 class HomeView(View):
     def get_numbers(self):
@@ -49,10 +53,6 @@ class HomeView(View):
         else:
             data_analysis = data_analysis_1.DataAnalysis.get_instance()
 
-        def get_part_after_static(file_path):
-            after_static_part = file_path.split("static/")[-1]
-            return after_static_part
-
         active_cases_plot_file = data_analysis.ACTIVE_CASES_PLOT_FILE
         cases_plot_file = data_analysis.CASES_PLOT_FILE
         recoveries_plot_file = data_analysis.RECOVERIES_PLOT_FILE
@@ -70,6 +70,25 @@ class HomeView(View):
             "plot_files": self.get_plots()
           })
 
+
+class PredictionsView(View):
+    def get_plots(self):
+        if data_analysis_1.DataAnalysis.get_instance() is None:
+            data_analysis = data_analysis_1.DataAnalysis()
+        else:
+            data_analysis = data_analysis_1.DataAnalysis.get_instance()
+
+        active_cases_poly_fit_plot_file = data_analysis.ACTIVE_CASES_POLY_FIT_PLOT_FILE
+        cases_poly_fit_plot_file = data_analysis.CASES_POLY_FIT_PLOT_FILE
+        recoveries_poly_fit_plot_file = data_analysis.RECOVERIES_POLY_FIT_PLOT_FILE
+        deaths_poly_fit_plot_file = data_analysis.DEATHS_POLY_FIT_PLOT_FILE
+
+        file_paths = [cases_poly_fit_plot_file, deaths_poly_fit_plot_file, recoveries_poly_fit_plot_file, active_cases_poly_fit_plot_file]
+        file_paths_after_static = list(map(get_part_after_static, file_paths))
+        return file_paths_after_static
+
+    def get(self, request):
+        return render(request, "predictions.html", {"title": "Predictions", "prediction_plots": self.get_plots()})
 
 class SymptomsView(View):
     def get(self, request):

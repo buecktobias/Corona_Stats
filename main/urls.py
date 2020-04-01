@@ -20,5 +20,6 @@ from .views import *
 urlpatterns = [
     path('', HomeView.as_view(), name="home"),
     path('symptoms/', SymptomsView.as_view(), name="symptoms"),
-    path('spread/', SpreadView.as_view(), name="spread")
+    path('spread/', SpreadView.as_view(), name="spread"),
+    path('prediction/', PredictionsView.as_view(), name="prediction"),
 ]
