@@ -2,6 +2,7 @@ from m_statistics.data_analysis_1 import DataAnalysis
 from Corona_Stats import settings
 import os
 import pandas as pd
+import mpu
 
 EUROPE = "EU"
 AFRICA = "AF"
@@ -77,6 +78,10 @@ def create_continent_data_for_corona_map():
                 file.write(f"{continent_long_name}, {amount}, {str(coords[0])}, {str(coords[1])} \n")
 
 
+def get_dist(cords1, cords2):
+    return mpu.haversine_distance(cords1, cords2)
+
+
 def create_country_stack():
     da = DataAnalysis()
     da.load_dfs()
@@ -100,8 +105,25 @@ def create_country_stack():
             countries[country_name] = country
 
     sorted_countries = {k: v for k, v in reversed(sorted(countries.items(), key=lambda item: item[1]["value"]))}
-    print(sorted_countries)
+
+    # 2d list list for zoom
+    # it starts with 4, before that continents are shown
+    zoom_stack = []
+
+    dist = 1000
+    for i in range(15):
+        max_dist = dist * (i+1)
+        new_zoom_level = []
+
+        for country_name, country in sorted_countries.items():
+            country_pos = (float(country["lat"]), float(country["lng"]))
+            country_obj = {"name": country_name, "pos": country_pos, "amount": country["value"]}
+            if all(map(lambda country_in_zoom: get_dist(country_in_zoom["pos"], country_pos) < max_dist, new_zoom_level)):
+                new_zoom_level.append(country_obj)
+        zoom_stack.append(new_zoom_level)
+
+    return zoom_stack
 
 
 if __name__ == '__main__':
-    create_country_stack()
+    print(create_country_stack())
