@@ -83,23 +83,23 @@ class DataAnalysis:
             pass
 
     def update(self):
-        self.__load_dfs()
+        self.load_dfs()
         self.__load_time_series()
         self.__create_plots()
 
     def get_deaths(self):
         if self.df_deaths is None:
-            self.__load_dfs()
+            self.load_dfs()
         return calc_sum(self.df_deaths, -1)
 
     def get_cases(self):
         if self.df_cases is None:
-            self.__load_dfs()
+            self.load_dfs()
         return calc_sum(self.df_cases, -1)
 
     def get_recoveries(self):
         if self.df_recoveries is None:
-            self.__load_dfs()
+            self.load_dfs()
         return calc_sum(self.df_recoveries, -1)
 
     def get_active_cases(self):
@@ -118,7 +118,7 @@ class DataAnalysis:
         self.__create_recoveries_poly_fit_plot()
         self.__create_cases_poly_fit_plot()
 
-    def __load_dfs(self):
+    def load_dfs(self):
         self.df_deaths = pd.read_csv(self.DEATHS_TIME_SERIES_DATA_FILE)
         self.df_cases = pd.read_csv(self.CASES_TIME_SERIES_DATA_FILE)
         self.df_recoveries = pd.read_csv(self.RECOVERIES_TIME_SERIES_DATA_FILE)
@@ -233,6 +233,7 @@ class DataAnalysis:
 
     def __create_deaths_poly_fit_plot(self):
         self.plot_poly(get_poly_fit(self.cases_time_series, 3), self.cases_time_series, self.DEATHS_POLY_FIT_PLOT_FILE, "COVID-19 Deaths Polynomial Best Fit Line", "Deaths")
+
 
 
 if __name__ == '__main__':

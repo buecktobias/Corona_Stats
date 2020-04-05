@@ -103,3 +103,4 @@ class SpreadView(View):
 
 class CoronaMap(View):
     def get(self, request, zoom_level):
+        pass

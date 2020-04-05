@@ -79,6 +79,7 @@ def create_continent_data_for_corona_map():
 
 def create_country_stack():
     da = DataAnalysis()
+    da.load_dfs()
     df_cases: pd.DataFrame = da.df_cases
     # country_name: {value: ..., lat: ..., lng: ...}
     countries = {}
@@ -97,7 +98,10 @@ def create_country_stack():
             country["lng"] = country_lng
 
             countries[country_name] = country
-    print(countries)
+
+    sorted_countries = {k: v for k, v in reversed(sorted(countries.items(), key=lambda item: item[1]["value"]))}
+    print(sorted_countries)
+
 
 if __name__ == '__main__':
-    create_continent_data_for_corona_map()
+    create_country_stack()
