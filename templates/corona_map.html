@@ -14,6 +14,7 @@
     {% load static %}
     <script>
     let map;
+    let corona_markers;
 
     function getText(URL){
         let xmlHttp = new XMLHttpRequest();
@@ -21,27 +22,8 @@
         xmlHttp.send();
         return xmlHttp.responseText;
     }
-    function createMapData(){
-        let stack = []
 
-    }
-
-    function initMap(){
-        let world = {lat: 0, lng: 0};
-        map = new google.maps.Map(document.getElementById('map'),
-            {zoom: 2,
-            center: world,
-            });
-        let customStyled = [
-          {
-            featureType: "all",
-            elementType: "labels",
-            stylers: [
-              { visibility: "off" }
-            ]
-          }
-        ];
-        map.set('styles',customStyled);
+    function createContinentsData(){
         let text = getText("{% static "cases_map_data.csv" %}");
         let lines = text.split("\n");
         for(let i = 0; i < lines.length; i++){
@@ -80,6 +62,48 @@
                   center: pos,
                   radius: Math.pow(amount,0.2) * 100_000
             });
+            corona_markers.add(cityCircle);
+            corona_markers.add(marker);
+    }
+    function createCountriesData(zoom_level){
+            let url = "{% url "corona_map_zoom_level" zoom_level %}"
+    }
+
+    function deleteAllObjects(){
+        for(let map_obj in corona_markers){
+            map_obj.setMap(null)
+        }
+    }
+
+    function zoomUpdate(){
+            let zoom = map.getZoom();
+            deleteAllObjects();
+            if(zoom < 4){
+                createContinentsData()
+            }else{
+
+            }
+
+    }
+
+    function initMap(){
+        let world = {lat: 0, lng: 0};
+        map = new google.maps.Map(document.getElementById('map'),
+            {zoom: 2,
+            center: world,
+            });
+        let customStyled = [
+          {
+            featureType: "all",
+            elementType: "labels",
+            stylers: [
+              { visibility: "off" }
+            ]
+          }
+        ];
+        map.set('styles',customStyled);
+        createContinentsData();
+        map.addListener("zoom_changed", zoomUpdate)
         }
 
     }

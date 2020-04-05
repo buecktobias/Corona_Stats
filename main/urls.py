@@ -22,4 +22,5 @@ urlpatterns = [
     path('symptoms/', SymptomsView.as_view(), name="symptoms"),
     path('spread/', SpreadView.as_view(), name="spread"),
     path('prediction/', PredictionsView.as_view(), name="prediction"),
+    path('api/zoom_countries/<int:zoom_level>', CoronaMap.as_view(), name="corona_map_zoom_level")
 ]

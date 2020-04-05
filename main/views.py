@@ -1,7 +1,8 @@
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.views import View
-from m_statistics import data_analysis_1
+from m_statistics import data_analysis_1, corona_map
+import json
 
 # Create your views here.
 
@@ -101,6 +102,10 @@ class SpreadView(View):
     def get(self, request):
         return render(request, "corona_map.html", {"title": "Home"})
 
+
 class CoronaMap(View):
+    zoom_levels = corona_map.create_country_stack()
+
     def get(self, request, zoom_level):
-        pass
+        data = json.dumps(self.zoom_levels[zoom_level])
+        return HttpResponse(data)

@@ -43,44 +43,40 @@ class DataAnalysis:
         return DataAnalysis.instance
 
     def __init__(self):
-        if DataAnalysis.instance is None:
+        # DATA FILE NAMES
+        self.CASES_TIME_SERIES_DATA_FILE = CASES_FILE_NAME
+        self.RECOVERIES_TIME_SERIES_DATA_FILE = RECOVERIES_FILE_NAME
+        self.DEATHS_TIME_SERIES_DATA_FILE = DEATHS_FILE_NAME
 
-            # DATA FILE NAMES
-            self.CASES_TIME_SERIES_DATA_FILE = CASES_FILE_NAME
-            self.RECOVERIES_TIME_SERIES_DATA_FILE = RECOVERIES_FILE_NAME
-            self.DEATHS_TIME_SERIES_DATA_FILE = DEATHS_FILE_NAME
+        # DFs
+        self.df_deaths = None
+        self.df_cases = None
 
-            # DFs
-            self.df_deaths = None
-            self.df_cases = None
+        # DFs
+        self.df_deaths = None
+        self.df_cases = None
+        self.df_recoveries = None
 
-            # DFs
-            self.df_deaths = None
-            self.df_cases = None
-            self.df_recoveries = None
+        # time series
+        self.cases_time_series = None
+        self.deaths_time_series = None
+        self.recoveries_time_series = None
+        self.active_cases_time_series = None
 
-            # time series
-            self.cases_time_series = None
-            self.deaths_time_series = None
-            self.recoveries_time_series = None
-            self.active_cases_time_series = None
+        # plot files
 
-            # plot files
+        self.CASES_PLOT_FILE = os.path.join(settings.PLOT_FOLDER_PATH, "cases.svg")
+        self.DEATHS_PLOT_FILE = os.path.join(settings.PLOT_FOLDER_PATH, "deaths.svg")
+        self.RECOVERIES_PLOT_FILE = os.path.join(settings.PLOT_FOLDER_PATH, "recoveries.svg")
+        self.ACTIVE_CASES_PLOT_FILE = os.path.join(settings.PLOT_FOLDER_PATH, "active_cases.svg")
 
-            self.CASES_PLOT_FILE = os.path.join(settings.PLOT_FOLDER_PATH, "cases.svg")
-            self.DEATHS_PLOT_FILE = os.path.join(settings.PLOT_FOLDER_PATH, "deaths.svg")
-            self.RECOVERIES_PLOT_FILE = os.path.join(settings.PLOT_FOLDER_PATH, "recoveries.svg")
-            self.ACTIVE_CASES_PLOT_FILE = os.path.join(settings.PLOT_FOLDER_PATH, "active_cases.svg")
+        # best fit plot files
+        self.CASES_POLY_FIT_PLOT_FILE = os.path.join(settings.PLOT_FOLDER_PATH, "cases_poly_fit.svg")
+        self.DEATHS_POLY_FIT_PLOT_FILE = os.path.join(settings.PLOT_FOLDER_PATH, "deaths_poly_fit.svg")
+        self.RECOVERIES_POLY_FIT_PLOT_FILE = os.path.join(settings.PLOT_FOLDER_PATH, "recoveries_poly_fit.svg")
+        self.ACTIVE_CASES_POLY_FIT_PLOT_FILE = os.path.join(settings.PLOT_FOLDER_PATH, "active_cases_poly_fit.svg")
 
-            # best fit plot files
-            self.CASES_POLY_FIT_PLOT_FILE = os.path.join(settings.PLOT_FOLDER_PATH, "cases_poly_fit.svg")
-            self.DEATHS_POLY_FIT_PLOT_FILE = os.path.join(settings.PLOT_FOLDER_PATH, "deaths_poly_fit.svg")
-            self.RECOVERIES_POLY_FIT_PLOT_FILE = os.path.join(settings.PLOT_FOLDER_PATH, "recoveries_poly_fit.svg")
-            self.ACTIVE_CASES_POLY_FIT_PLOT_FILE = os.path.join(settings.PLOT_FOLDER_PATH, "active_cases_poly_fit.svg")
-
-            DataAnalysis.instance = self
-        else:
-            pass
+        DataAnalysis.instance = self
 
     def update(self):
         self.load_dfs()

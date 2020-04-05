@@ -110,15 +110,15 @@ def create_country_stack():
     # it starts with 4, before that continents are shown
     zoom_stack = []
 
-    dist = 1000
-    for i in range(15):
-        max_dist = dist * (i+1)
+    dist = 20_000
+    for i in range(25):
+        min_dist = dist / (i+1)
         new_zoom_level = []
 
         for country_name, country in sorted_countries.items():
             country_pos = (float(country["lat"]), float(country["lng"]))
             country_obj = {"name": country_name, "pos": country_pos, "amount": country["value"]}
-            if all(map(lambda country_in_zoom: get_dist(country_in_zoom["pos"], country_pos) < max_dist, new_zoom_level)):
+            if all(map(lambda country_in_zoom: get_dist(country_in_zoom["pos"], country_pos) > min_dist, new_zoom_level)):
                 new_zoom_level.append(country_obj)
         zoom_stack.append(new_zoom_level)
 
