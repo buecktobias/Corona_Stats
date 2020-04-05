@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+{% block head %}
+    <style>
+       /* Set the size of the div element that contains the map */
+      #map {
+        height: 30em;  /* The height is 400 pixels */
+        width: 100%;  /* The width is the width of the web page */
+       }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div id="map"></div>
+    {% load static %}
+    <script>
+    let map;
+
+    function getText(URL){
+        let xmlHttp = new XMLHttpRequest();
+        xmlHttp.open( "GET", URL, false ); // false for synchronous request
+        xmlHttp.send();
+        return xmlHttp.responseText;
+    }
+    function createMapData(){
+        let stack = []
+
+    }
+
+    function initMap(){
+        let world = {lat: 0, lng: 0};
+        map = new google.maps.Map(document.getElementById('map'),
+            {zoom: 2,
+            center: world,
+            });
+        let customStyled = [
+          {
+            featureType: "all",
+            elementType: "labels",
+            stylers: [
+              { visibility: "off" }
+            ]
+          }
+        ];
+        map.set('styles',customStyled);
+        let text = getText("{% static "cases_map_data.csv" %}");
+        let lines = text.split("\n");
+        for(let i = 0; i < lines.length; i++){
+            let line = lines[i];
+            let elements = line.split(",");
+            if (elements.length < 4){
+                continue
+            }
+
+            let name = elements[0];
+            let amount = Number(elements[1]);
+            let cord_lat = Number(elements[2]);
+            let cord_lng = Number(elements[3]);
+
+            if (name === "World"){
+                continue
+            }
+
+            let pos = {lat: cord_lat, lng: cord_lng};
+
+            let marker = new google.maps.Marker({
+                position: pos,
+                map: map,
+                icon: "{% static "images/transparent.png" %}",
+                label: name + " " + amount
+            });
+
+
+            let cityCircle = new google.maps.Circle({
+                  strokeColor: '#FF0000',
+                  strokeOpacity: 0.8,
+                  strokeWeight: 2,
+                  fillColor: '#FF0000',
+                  fillOpacity: 0.35,
+                  map: map,
+                  center: pos,
+                  radius: Math.pow(amount,0.2) * 100_000
+            });
+        }
+
+    }
+</script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBrgCB2IxqQ3TDzvlOpO2yUEDsBfXTMDgs&callback=initMap"></script>
+{% endblock %}
+
+

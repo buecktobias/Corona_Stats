@@ -19,6 +19,10 @@
     background-color: #333445;
 }
 
+.high {
+    height: 100%;
+}
+
 .fill {
     min-height: 100%;
 }

@@ -5,6 +5,7 @@ from m_statistics import data_analysis_1
 
 # Create your views here.
 
+
 def get_part_after_static(file_path):
     after_static_part = file_path.split("static/")[-1]
     return after_static_part
@@ -90,6 +91,7 @@ class PredictionsView(View):
     def get(self, request):
         return render(request, "predictions.html", {"title": "Predictions", "prediction_plots": self.get_plots()})
 
+
 class SymptomsView(View):
     def get(self, request):
         return render(request, "index.html", {"title": "Home"})
@@ -97,4 +99,7 @@ class SymptomsView(View):
 
 class SpreadView(View):
     def get(self, request):
-        return render(request, "index.html", {"title": "Home"})
+        return render(request, "corona_map.html", {"title": "Home"})
+
+class CoronaMap(View):
+    def get(self, request, zoom_level):

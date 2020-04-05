@@ -217,6 +217,11 @@ class DataAnalysis:
         fig.show()
         fig.savefig(to_file)
 
+    def create_active_cases_data(self):
+        rows = len(self.df_cases.values)
+        columns = len(self.df_cases.values[0])
+        # todo create df for active case ???? maybe
+
     def __create_cases_poly_fit_plot(self):
         self.plot_poly(get_poly_fit(self.cases_time_series, 3), self.cases_time_series, self.CASES_POLY_FIT_PLOT_FILE, "COVID-19 Cases Polynomial Best Fit Line", "Cases")
 
