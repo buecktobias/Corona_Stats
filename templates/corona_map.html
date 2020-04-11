@@ -64,14 +64,18 @@
             });
             corona_markers.add(cityCircle);
             corona_markers.add(marker);
+        }
     }
     function createCountriesData(zoom_level){
-            let url = "{% url "corona_map"%}"
+            let url = "{% url "corona_map" %}"  + zoom_level.toString();
+            let text = getText(url);
+            let json_countries = JSON.parse(text);
     }
 
     function deleteAllObjects(){
-        for(let map_obj in corona_markers){
-            map_obj.setMap(null)
+        for(var i = 0; i < corona_markers.length; i++){
+            let map_obj = corona_markers[i];
+            map_obj.setMap(null);
         }
     }
 
@@ -79,11 +83,10 @@
             let zoom = map.getZoom();
             deleteAllObjects();
             if(zoom < 4){
-                createContinentsData()
+                createContinentsData();
             }else{
-
+                createCountriesData(zoom);
             }
-
     }
 
     function initMap(){
@@ -92,23 +95,15 @@
             {zoom: 2,
             center: world,
             });
-        let customStyled = [
-          {
-            featureType: "all",
-            elementType: "labels",
-            stylers: [
-              { visibility: "off" }
-            ]
-          }
-        ];
-        map.set('styles',customStyled);
+        let customStyled = [{featureType: "all", elementType: "labels", stylers: [{ visibility: "off" }]}];
+        map.set('styles', customStyled);
         createContinentsData();
-        map.addListener("zoom_changed", zoomUpdate)
-        }
-
+        map.addListener("zoom_changed", function(e){
+            zoomUpdate();
+        });
     }
 </script>
-    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBrgCB2IxqQ3TDzvlOpO2yUEDsBfXTMDgs&callback=initMap"></script>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBrgCB2IxqQ3TDzvlOpO2yUEDsBfXTMDgs&callback=initMap"></script>
 {% endblock %}
 
 
