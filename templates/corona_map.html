@@ -14,7 +14,7 @@
     {% load static %}
     <script>
     let map;
-    let corona_markers;
+    let corona_markers= [];
 
     function getText(URL){
         let xmlHttp = new XMLHttpRequest();
@@ -62,8 +62,8 @@
                   center: pos,
                   radius: Math.pow(amount,0.2) * 100_000
             });
-            corona_markers.add(cityCircle);
-            corona_markers.add(marker);
+            corona_markers.push(cityCircle);
+            corona_markers.push(marker);
         }
     }
     function createCountriesData(zoom_level){
