@@ -22,6 +22,28 @@
         xmlHttp.send();
         return xmlHttp.responseText;
     }
+    function createData(pos, name,  amount){
+                let marker = new google.maps.Marker({
+                position: pos,
+                map: map,
+                icon: "{% static "images/transparent.png" %}",
+                label: name + " " + amount
+            });
+
+
+            let cityCircle = new google.maps.Circle({
+                  strokeColor: '#FF0000',
+                  strokeOpacity: 0.8,
+                  strokeWeight: 2,
+                  fillColor: '#FF0000',
+                  fillOpacity: 0.35,
+                  map: map,
+                  center: pos,
+                  radius: Math.pow(amount,0.2) * 100_000
+            });
+            corona_markers.push(cityCircle);
+            corona_markers.push(marker);
+    }
 
     function createContinentsData(){
         let text = getText("{% static "cases_map_data.csv" %}");
@@ -43,33 +65,20 @@
             }
 
             let pos = {lat: cord_lat, lng: cord_lng};
-
-            let marker = new google.maps.Marker({
-                position: pos,
-                map: map,
-                icon: "{% static "images/transparent.png" %}",
-                label: name + " " + amount
-            });
-
-
-            let cityCircle = new google.maps.Circle({
-                  strokeColor: '#FF0000',
-                  strokeOpacity: 0.8,
-                  strokeWeight: 2,
-                  fillColor: '#FF0000',
-                  fillOpacity: 0.35,
-                  map: map,
-                  center: pos,
-                  radius: Math.pow(amount,0.2) * 100_000
-            });
-            corona_markers.push(cityCircle);
-            corona_markers.push(marker);
+            createData(pos, name, amount);
         }
     }
     function createCountriesData(zoom_level){
             let url = "{% url "corona_map" %}"  + zoom_level.toString();
             let text = getText(url);
             let json_countries = JSON.parse(text);
+            for(var i = 0; i < json_countries.length;i++){
+                let country = json_countries[i];
+                let pos = {lat: country["pos"][0], lng: country["pos"][1]};
+                let name = country["name"];
+                let amount = country["amount"];
+                createData(pos, name, amount);
+            }
     }
 
     function deleteAllObjects(){
