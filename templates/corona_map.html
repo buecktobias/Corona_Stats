@@ -22,7 +22,13 @@
         xmlHttp.send();
         return xmlHttp.responseText;
     }
-    function createData(pos, name,  amount){
+
+    function getRadius(amount, zoom_level){
+        return (10 + Math.pow(amount, 0.3) * 50_000) / (zoom_level+1)
+    }
+
+
+    function createData(pos, name,  amount, zoom_level){
                 let marker = new google.maps.Marker({
                 position: pos,
                 map: map,
@@ -39,14 +45,14 @@
                   fillOpacity: 0.35,
                   map: map,
                   center: pos,
-                  radius: Math.pow(amount,0.2) * 100_000
+                  radius: getRadius(amount, zoom_level)
             });
             corona_markers.push(cityCircle);
             corona_markers.push(marker);
     }
 
-    function createContinentsData(){
-        let text = getText("{% static "cases_map_data.csv" %}");
+    function createContinentsData(zoom_level){
+        let text = getText("{% static "cases_map_data_11.csv" %}");
         let lines = text.split("\n");
         for(let i = 0; i < lines.length; i++){
             let line = lines[i];
@@ -65,7 +71,7 @@
             }
 
             let pos = {lat: cord_lat, lng: cord_lng};
-            createData(pos, name, amount);
+            createData(pos, name, amount, zoom_level);
         }
     }
     function createCountriesData(zoom_level){
@@ -77,7 +83,7 @@
                 let pos = {lat: country["pos"][0], lng: country["pos"][1]};
                 let name = country["name"];
                 let amount = country["amount"];
-                createData(pos, name, amount);
+                createData(pos, name, amount, zoom_level);
             }
     }
 
@@ -92,7 +98,7 @@
             let zoom = map.getZoom();
             deleteAllObjects();
             if(zoom < 4){
-                createContinentsData();
+                createContinentsData(zoom);
             }else{
                 createCountriesData(zoom);
             }
@@ -100,13 +106,14 @@
 
     function initMap(){
         let world = {lat: 0, lng: 0};
+        let zoom = 2
         map = new google.maps.Map(document.getElementById('map'),
-            {zoom: 2,
+            {zoom: zoom,
             center: world,
             });
         let customStyled = [{featureType: "all", elementType: "labels", stylers: [{ visibility: "off" }]}];
         map.set('styles', customStyled);
-        createContinentsData();
+        createContinentsData(zoom);
         map.addListener("zoom_changed", function(e){
             zoomUpdate();
         });

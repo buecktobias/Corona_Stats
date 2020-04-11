@@ -46,7 +46,7 @@ def create_continent_data_for_corona_map():
     da.update()
     dfs = [
         {"file_name": os.path.join(settings.STATIC_FOLDER_PATH, "recoveries_map_data.csv"), "df": da.df_recoveries},
-        {"file_name": os.path.join(settings.STATIC_FOLDER_PATH, "cases_map_data.csv"), "df": da.df_cases},
+        {"file_name": os.path.join(settings.STATIC_FOLDER_PATH, "cases_map_data_11.csv"), "df": da.df_cases},
         {"file_name": os.path.join(settings.STATIC_FOLDER_PATH, "deaths_map_data.csv"), "df": da.df_deaths}
     ]
 
@@ -110,9 +110,9 @@ def create_country_stack():
     # it starts with 4, before that continents are shown
     zoom_stack = []
 
-    dist = 20_000
+    dist = 25_000
     for i in range(25):
-        min_dist = dist / (i+1)
+        min_dist = dist / ((i+1) ** 2.4)
         new_zoom_level = []
 
         for country_name, country in sorted_countries.items():
@@ -126,4 +126,4 @@ def create_country_stack():
 
 
 if __name__ == '__main__':
-    print(create_country_stack())
+    create_continent_data_for_corona_map()
