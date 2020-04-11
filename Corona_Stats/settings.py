@@ -129,3 +129,6 @@ DATA_FOLDER_PATH = os.path.join(STATIC_FOLDER_PATH, "data")
 STATICFILES_DIRS = [
     STATIC_FOLDER_PATH,
 ]
+
+DATA_SOURCE = "https://github.com/CSSEGISandData/COVID-19"
+GITHUB_PROJECT = "https://github.com/buecktobias/Corona_Stats"

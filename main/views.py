@@ -3,6 +3,7 @@ from django.shortcuts import render
 from django.views import View
 from m_statistics import data_analysis_1, corona_map
 import json
+from Corona_Stats.settings import GITHUB_PROJECT, DATA_SOURCE
 
 # Create your views here.
 
@@ -95,12 +96,17 @@ class PredictionsView(View):
 
 class SymptomsView(View):
     def get(self, request):
-        return render(request, "index.html", {"title": "Home"})
+        return render(request, "index.html", {"title": "Symptoms"})
 
 
 class SpreadView(View):
     def get(self, request):
-        return render(request, "corona_map.html", {"title": "Home"})
+        return render(request, "corona_map.html", {"title": "Spread"})
+
+
+class About(View):
+    def get(self, request):
+        return render(request, "about.html", {"title": "About", "data_source": DATA_SOURCE, "github_src": GITHUB_PROJECT})
 
 
 class CoronaMap(View):
